@@ -512,13 +512,13 @@ func TestV3RunSuiteWithSubChartsWhenPass(t *testing.T) {
 	suiteDoc := `
 suite: test suite with subchart
 templates:
-  - charts/postgresql/templates/deployment.yaml
+  - charts/postgresql/templates/statefulset.yaml
 tests:
   - it: should pass
     asserts:
       - equal:
           path: kind
-          value: Deployment
+          value: StatefulSet
       - matchSnapshot: {}
 `
 	testSuite := TestSuite{}
@@ -534,22 +534,22 @@ func TestV3RunSuiteWithSubChartsWithAliasWhenPass(t *testing.T) {
 	suiteDoc := `
 suite: test suite with subchart
 templates:
-  - charts/postgresql/templates/pvc.yaml 
-  - charts/another-postgresql/templates/pvc.yaml
+  - charts/postgresql/templates/metrics-svc.yaml 
+  - charts/another-postgresql/templates/metrics-svc.yaml
 tests:
   - it: should both pass
     asserts:
-      - equal:
-          path: kind
-          value: PersistentVolumeClaim
-      - matchSnapshot: {}
-  - it: should no pvc for alias
-    set:
-      another-postgresql.persistence.enabled: false
-    template: charts/another-postgresql/templates/pvc.yaml
-    asserts:
       - hasDocuments:
           count: 0
+  - it: should have metrics for alias
+    set:
+      another-postgresql.metrics.enabled: true
+    template: charts/another-postgresql/templates/metrics-svc.yaml
+    asserts:
+      - equal:
+          path: kind
+          value: Service
+      - matchSnapshot: {}
 `
 	testSuite := TestSuite{}
 	yaml.Unmarshal([]byte(suiteDoc), &testSuite)
@@ -557,7 +557,7 @@ tests:
 	cache, _ := snapshot.CreateSnapshotOfSuite(path.Join(tmpdir, "v3_subchartwithalias_test.yaml"), false)
 	suiteResult := testSuite.RunV3(testV3WithSubChart, cache, true, &results.TestSuiteResult{})
 
-	validateTestResultAndSnapshots(t, suiteResult, true, "test suite with subchart", 2, 2, 2, 0, 0)
+	validateTestResultAndSnapshots(t, suiteResult, true, "test suite with subchart", 2, 1, 1, 0, 0)
 }
 
 func TestV3RunSuiteNameOverrideFail(t *testing.T) {

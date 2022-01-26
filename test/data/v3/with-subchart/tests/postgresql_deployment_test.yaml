@@ -1,15 +1,15 @@
 suite: test postgresql deployment
 templates:
-  - charts/postgresql/templates/deployment.yaml 
+  - charts/postgresql/templates/statefulset.yaml 
 tests:
   - it: should pass all kinds of assertion for subchart
     values:
       - ./values/image.yaml
     asserts:
       - isKind:
-          of: Deployment
+          of: StatefulSet
       - isAPIVersion:
-          of: extensions/v1beta1
+          of: apps/v1beta1
       - hasDocuments:
           count: 1
       - matchSnapshot:

@@ -288,12 +288,12 @@
 			Expected to be apiVersion:
 				v2
 			Actual:
-				extensions/v1beta1
+				apps/v1
 			DocumentIndex:	1
 			Expected to be apiVersion:
 				v2
 			Actual:
-				extensions/v1beta1
+				apps/v1
 
 		- asserts[12] `hasDocuments` fail
 			Template:	basic/templates/deployment.yaml

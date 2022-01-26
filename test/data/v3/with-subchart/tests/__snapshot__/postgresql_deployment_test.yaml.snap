@@ -1,64 +1,129 @@
 should pass all kinds of assertion for subchart:
   1: |
+    replicas: 1
+    selector:
+      matchLabels:
+        app.kubernetes.io/instance: RELEASE-NAME
+        app.kubernetes.io/name: postgresql
+        role: primary
+    serviceName: RELEASE-NAME-postgresql-headless
     template:
       metadata:
         labels:
-          app: RELEASE-NAME-postgresql
+          app.kubernetes.io/component: primary
+          app.kubernetes.io/instance: RELEASE-NAME
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: postgresql
+          helm.sh/chart: postgresql-10.16.2
+          role: primary
+        name: RELEASE-NAME-postgresql
       spec:
+        affinity:
+          nodeAffinity: null
+          podAffinity: null
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: primary
+                    app.kubernetes.io/instance: RELEASE-NAME
+                    app.kubernetes.io/name: postgresql
+                namespaces:
+                - NAMESPACE
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        automountServiceAccountToken: false
         containers:
         - env:
+          - name: BITNAMI_DEBUG
+            value: "false"
+          - name: POSTGRESQL_PORT_NUMBER
+            value: "5432"
+          - name: POSTGRESQL_VOLUME_DIR
+            value: /bitnami/postgresql
+          - name: PGDATA
+            value: /bitnami/postgresql/data
           - name: POSTGRES_USER
             value: postgres
-          - name: PGUSER
-            value: postgres
-          - name: POSTGRES_DB
-            value: ""
-          - name: POSTGRES_INITDB_ARGS
-            value: ""
-          - name: PGDATA
-            value: /var/lib/postgresql/data/pgdata
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: postgres-password
+                key: postgresql-password
                 name: RELEASE-NAME-postgresql
-          - name: POD_IP
-            valueFrom:
-              fieldRef:
-                fieldPath: status.podIP
-          image: postgres:9.6.2
-          imagePullPolicy: ""
+          - name: POSTGRESQL_ENABLE_LDAP
+            value: "no"
+          - name: POSTGRESQL_ENABLE_TLS
+            value: "no"
+          - name: POSTGRESQL_LOG_HOSTNAME
+            value: "false"
+          - name: POSTGRESQL_LOG_CONNECTIONS
+            value: "false"
+          - name: POSTGRESQL_LOG_DISCONNECTIONS
+            value: "false"
+          - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+            value: "off"
+          - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+            value: error
+          - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+            value: pgaudit
+          image: docker.io/bitnami/postgresql:11.14.0-debian-10-r28
+          imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
               command:
-              - sh
+              - /bin/sh
               - -c
-              - exec pg_isready --host $POD_IP
+              - exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
             failureThreshold: 6
-            initialDelaySeconds: 60
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
             timeoutSeconds: 5
           name: RELEASE-NAME-postgresql
           ports:
           - containerPort: 5432
-            name: postgresql
+            name: tcp-postgresql
           readinessProbe:
             exec:
               command:
-              - sh
+              - /bin/sh
               - -c
-              - exec pg_isready --host $POD_IP
+              - -e
+              - |
+                exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+                [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+            failureThreshold: 6
             initialDelaySeconds: 5
-            periodSeconds: 5
-            timeoutSeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
           resources:
             requests:
-              cpu: 100m
+              cpu: 250m
               memory: 256Mi
+          securityContext:
+            runAsUser: 1001
           volumeMounts:
-          - mountPath: /var/lib/postgresql/data/pgdata
+          - mountPath: /dev/shm
+            name: dshm
+          - mountPath: /bitnami/postgresql
             name: data
-            subPath: postgresql-db
+            subPath: null
+        securityContext:
+          fsGroup: 1001
         volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: RELEASE-NAME-postgresql
+        - emptyDir:
+            medium: Memory
+          name: dshm
+    updateStrategy:
+      type: RollingUpdate
+    volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 8Gi

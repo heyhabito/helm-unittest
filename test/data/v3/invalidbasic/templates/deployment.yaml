@@ -1,5 +1,5 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "basic.fullname" . }}
@@ -37,7 +37,7 @@ spec:
 {{ toYaml .Values.nodeSelector | indent 8 }}
     {{- end }}
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "basic.fullname" . }}-db
