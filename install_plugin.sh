@@ -1,4 +1,6 @@
-#!/bin/sh -e
+#!/usr/bin/env bash
+
+set -e
 
 # Copied w/ love from the excellent hypnoglow/helm-s3
 
@@ -7,7 +9,7 @@ if [ -n "${HELM_UNITTEST_PLUGIN_NO_INSTALL_HOOK}" ]; then
     exit 0
 fi
 
-version="$(cat plugin.yaml | grep "version" | cut -d '"' -f 2)"
+version="$(grep "version" plugin.yaml | cut -d '"' -f 2)"
 echo "Downloading and installing helm-unittest v${version} ..."
 
 url=""
@@ -44,9 +46,8 @@ else
     url="https://github.com/heyhabito/helm-unittest/releases/download/v${version}/helm-unittest_${version}_windows_${arch}.tar.gz"
 fi
 
-echo $url
+echo "$url"
 
-mkdir -p "bin"
 mkdir -p "releases/v${version}"
 
 # Download with curl if possible.
