@@ -37,7 +37,9 @@ func (c *ValidateContext) getManifests() ([]common.K8sManifest, error) {
 	}
 
 	if len(c.Docs) <= c.Index {
-		return nil, fmt.Errorf("documentIndex %d out of range", c.Index)
+		if c.Negative == false {
+			return nil, fmt.Errorf("documentIndex %d out of range", c.Index)
+		}
 	}
 	manifests = append(manifests, c.Docs[c.Index])
 	return manifests, nil

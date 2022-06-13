@@ -35,9 +35,9 @@ build() {
   fi
 }
 
-image="quintush/helm-unittest"
+image="heyhabito/helm-unittest"
 helmRepo="helm/helm"
-pluginRepo="quintush/helm-unittest"
+pluginRepo="heyhabito/helm-unittest"
 
 if [[ ${CI} == 'true' ]]; then
   helmLatest=`curl -sL -H "Authorization: token ${GITHUB_TOKEN}"  https://api.github.com/repos/${helmRepo}/tags?per_page=50 |jq -r ".[].name"|sed 's/^v//'|sort -V |grep -v -`

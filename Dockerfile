@@ -8,7 +8,7 @@ ARG PLUGIN_VERSION
 
 ENV HELM_BASE_URL="https://get.helm.sh"
 ENV HELM_TAR_FILE="helm-v${HELM_VERSION}-linux-amd64.tar.gz"
-ENV PLUGIN_URL="https://github.com/quintush/helm-unittest/"
+ENV PLUGIN_URL="https://github.com/heyhabito/helm-unittest/"
 
 RUN if printf "$HELM_VERSION" | grep -Eq '^3.+'; then \
     apk add --update --no-cache curl ca-certificates git bash && \

@@ -7,7 +7,7 @@ HELM_PLUGIN_DIR := $(HELM_DATA_HOME)/plugins/helm-unittest
 VERSION := $(shell sed -n -e 's/version:[ "]*\([^"]*\).*/\1/p' plugin.yaml)
 DIST := ./_dist
 LDFLAGS := "-X main.version=${VERSION} -extldflags '-static'"
-DOCKER ?= "quintush/helm-unittest"
+DOCKER ?= "heyhabito/helm-unittest"
 
 .PHONY: install
 install: bootstrap build

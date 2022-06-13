@@ -1,8 +1,8 @@
 # helm unittest
 
-[![CircleCI](https://circleci.com/gh/quintush/helm-unittest.svg?style=svg)](https://circleci.com/gh/quintush/helm-unittest)
-[![Go Report Card](https://goreportcard.com/badge/github.com/quintush/helm-unittest)](https://goreportcard.com/report/github.com/quintush/helm-unittest)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=quintush_helm-unittest&metric=alert_status)](https://sonarcloud.io/dashboard?id=quintush_helm-unittest)
+[![CircleCI](https://circleci.com/gh/heyhabito/helm-unittest.svg?style=svg)](https://circleci.com/gh/heyhabito/helm-unittest)
+[![Go Report Card](https://goreportcard.com/badge/github.com/heyhabito/helm-unittest)](https://goreportcard.com/report/github.com/heyhabito/helm-unittest)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=heyhabito_helm-unittest&metric=alert_status)](https://sonarcloud.io/dashboard?id=heyhabito_helm-unittest)
 
 Unit test for *helm chart* in YAML to keep your chart consistent and robust!
 
@@ -17,25 +17,28 @@ Feature:
 
 If you are ready for writing tests, check the [DOCUMENT](./DOCUMENT.md) for the test API in YAML.
 
-- [Install](#install)
-- [Docker Usage](#docker-usage)
-- [Get Started](#get-started)
-- [Test Suite File](#test-suite-file)
-- [Usage](#usage)
-  - [Flags](#flags)
-- [Example](#example)
-- [Snapshot Testing](#snapshot-testing)
-- [Dependend subchart Testing](#dependend-subchart-testing)
-- [Tests within subchart](#tests-within-subchart)
-- [Frequently Asked Questions](#frequently-asked-questions)
-- [Related Projects / Commands](#related-projects--commands)
-- [Contributing](#contributing)
+- [helm unittest](#helm-unittest)
+  - [Documentation](#documentation)
+  - [Install](#install)
+  - [Docker Usage](#docker-usage)
+  - [Get Started](#get-started)
+  - [Test Suite File](#test-suite-file)
+  - [Usage](#usage)
+    - [Flags](#flags)
+  - [Example](#example)
+  - [Snapshot Testing](#snapshot-testing)
+  - [Dependent subchart Testing](#dependent-subchart-testing)
+  - [Tests within subchart](#tests-within-subchart)
+  - [Frequently Asked Questions](#frequently-asked-questions)
+  - [Related Projects / Commands](#related-projects--commands)
+  - [License](#license)
+  - [Contributing](#contributing)
 
 
 ## Install
 
 ```
-$ helm plugin install https://github.com/quintush/helm-unittest
+$ helm plugin install https://github.com/heyhabito/helm-unittest
 ```
 
 It will install the latest version of binary into helm plugin directory.
@@ -44,23 +47,23 @@ It will install the latest version of binary into helm plugin directory.
 
 ``` 
 # run help of latest helm with latest helm unittest plugin
-docker run -ti --rm -v $(pwd):/apps quintush/helm-unittest
+docker run -ti --rm -v $(pwd):/apps heyhabito/helm-unittest
 
 # run help of specific helm version with specific helm unittest plugin version
-docker run -ti --rm -v $(pwd):/apps quintush/helm-unittest:3.3.0-0.2.2
+docker run -ti --rm -v $(pwd):/apps heyhabito/helm-unittest:3.3.0-0.2.2
 
 # run unittests of a helm 2 chart
 # make sure to mount local folder to /apps in container
-docker run -ti --rm -v $(pwd):/apps quintush/helm-unittest:2.16.10-0.2.2 .
+docker run -ti --rm -v $(pwd):/apps heyhabito/helm-unittest:2.16.10-0.2.2 .
 
 # run unittests of a helm 3 chart
 # make sure to mount local folder to /apps in container
-docker run -ti --rm -v $(pwd):/apps quintush/helm-unittest:3.3.0-0.2.2 -3 .
+docker run -ti --rm -v $(pwd):/apps heyhabito/helm-unittest:3.3.0-0.2.2 -3 .
 
 # run unittests of a helm 3 chart with Junit output for CI validation
 # make sure to mount local folder to /apps in container
 # the test-output.xml will be available in the local folder.
-docker run -ti --rm -v $(pwd):/apps quintush/helm-unittest:3.3.0-0.2.2 -3 -o test-output.xml -t junit .
+docker run -ti --rm -v $(pwd):/apps heyhabito/helm-unittest:3.3.0-0.2.2 -3 -o test-output.xml -t junit .
 ```
 
 The docker container contains the fully installed helm client, including the helm-unittest plugin.
@@ -233,7 +236,7 @@ Issues and PRs are welcome!
 Before start developing this plugin, you must have [go] (https://golang.org/doc/install) >= 1.14 installed, and run:
 
 ```
-git clone git@github.com:quintush/helm-unittest.git
+git clone git@github.com:heyhabito/helm-unittest.git
 cd helm-unittest
 ```
 
