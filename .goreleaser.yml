@@ -4,7 +4,7 @@ before:
   hooks:
     - go mod download
 builds:
-  - main: ./cmd
+  - main: ./cmd/helm-unittest
     binary: ./bin/helm-unittest
     env:
       - CGO_ENABLED=0
