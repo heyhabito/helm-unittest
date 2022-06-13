@@ -1,9 +1,9 @@
-name: "unittest"
-version: "0.2.9"
-usage: "unittest for helm charts"
-description: "Unit test for helm chart in YAML with ease to keep your chart functional and robust."
-ignoreFlags: false
+name: "cm-push"
+version: "0.2.10"
+usage: "Please see https://github.com/heyhabito/helm-unittest for usage"
+description: "Unit testing for Helm charts"
 command: "$HELM_PLUGIN_DIR/untt"
+useTunnel: false
 hooks:
-  install: "cd $HELM_PLUGIN_DIR; ./install-binary.sh"
-  update: "cd $HELM_PLUGIN_DIR; HELM_PLUGIN_UPDATE=1 ./install-binary.sh"
+  install: "cd $HELM_PLUGIN_DIR; install_plugin.sh"
+  update: "cd $HELM_PLUGIN_DIR; install_plugin.sh"
