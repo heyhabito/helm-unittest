@@ -1,4 +1,4 @@
-name: "cm-push"
+name: "unittest"
 version: "0.2.10"
 usage: "Please see https://github.com/heyhabito/helm-unittest for usage"
 description: "Unit testing for Helm charts"
