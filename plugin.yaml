@@ -5,5 +5,5 @@ description: "Unit testing for Helm charts"
 command: "$HELM_PLUGIN_DIR/untt"
 useTunnel: false
 hooks:
-  install: "cd $HELM_PLUGIN_DIR; install_plugin.sh"
-  update: "cd $HELM_PLUGIN_DIR; install_plugin.sh"
+  install: "cd $HELM_PLUGIN_DIR; bash ./install_plugin.sh"
+  update: "cd $HELM_PLUGIN_DIR; bash ./install_plugin.sh"
